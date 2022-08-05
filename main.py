@@ -1,13 +1,12 @@
-import re
 import os
-from urllib.request import Request, urlopen
+import requests
+from bs4 import BeautifulSoup
 
 cls = lambda: os.system('cls' if os.name=='nt' else 'clear')
 
-req = Request('https://www.palabrasaleatorias.com/palavras-aleatorias.php', headers={'User-Agent': 'Mozilla/5.0'})
-palavras = urlopen(req).read()[14133:]
-pa = re.search(re.compile(  rb'([A-Za-z-]+)</div>\r\n<br />\r\nPesquisa significado em:'), palavras).group(1).decode().upper()
-
+req = requests.get('https://www.palabrasaleatorias.com/palavras-aleatorias.php')
+sopa = BeautifulSoup(req.content,"html.parser")
+pa = sopa.find(attrs={"style":"font-size:3em; color:#6200C5;"}).get_text().strip().upper()
 pu = list("_"*len(pa))
 on = True
 vi = 5
